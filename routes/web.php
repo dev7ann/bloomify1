@@ -17,10 +17,11 @@ Route::get('/', function () {
 Route::get('/wellness', [WellnessController::class, 'index'])->name('wellness.index');
 Route::get('/support', [SupportController::class, 'index'])->name('support.index');
 
-Route::get('/dashboard', [UserDashboardController::class, 'index'])->middleware('auth')->name('dashboard');
+Route::get('/dashboard', [UserDashboardController::class, 'index'])
+    ->middleware(['auth', 'trackLastLogin'])->name('dashboard');
 
-Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::prefix('admin')->middleware(['auth', 'admin', 'trackLastLogin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 });
 
 Route::middleware('auth')->group(function () {
