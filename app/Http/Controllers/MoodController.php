@@ -8,20 +8,28 @@ use Illuminate\Support\Facades\Auth;
 
 class MoodController extends Controller
 {
-    // Show all moods for logged-in user
     public function index()
     {
-        $moods = Mood::where('user_id', Auth::id())->latest()->get();
+        $moods = Auth::user()->moods()->latest()->paginate(10);
         return view('moods.index', compact('moods'));
     }
 
-    // Show create form
+    public function partialIndex()
+    {
+        $moods = Auth::user()->moods()->latest()->paginate(10);
+        return view('moods.partial.index', compact('moods'));
+    }
+
     public function create()
     {
         return view('moods.create');
     }
 
-    // Store new mood
+    public function partialCreate()
+    {
+        return view('moods.partial.create');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -38,35 +46,48 @@ class MoodController extends Controller
         return redirect()->route('moods.index')->with('success', 'Mood logged successfully!');
     }
 
-    // Show single mood
-    // Remove $this->authorize(...) lines
-public function show(Mood $mood)
-{
-    return view('moods.show', compact('mood'));
-}
+    public function show(Mood $mood)
+    {
+        if ($mood->user_id !== Auth::id()) abort(403);
+        return view('moods.show', compact('mood'));
+    }
 
-public function edit(Mood $mood)
-{
-    return view('moods.edit', compact('mood'));
-}
+    public function partialShow(Mood $mood)
+    {
+        if ($mood->user_id !== Auth::id()) abort(403);
+        return view('moods.partial.show', compact('mood'));
+    }
 
-public function update(Request $request, Mood $mood)
-{
-    $request->validate([
-        'mood' => 'required|string|max:255',
-        'note' => 'nullable|string|max:1000',
-    ]);
+    public function edit(Mood $mood)
+    {
+        if ($mood->user_id !== Auth::id()) abort(403);
+        return view('moods.edit', compact('mood'));
+    }
 
-    $mood->update($request->only('mood', 'note'));
+    public function partialEdit(Mood $mood)
+    {
+        if ($mood->user_id !== Auth::id()) abort(403);
+        return view('moods.partial.edit', compact('mood'));
+    }
 
-    return redirect()->route('moods.index')->with('success', 'Mood updated!');
-}
+    public function update(Request $request, Mood $mood)
+    {
+        if ($mood->user_id !== Auth::id()) abort(403);
+        $request->validate([
+            'mood' => 'required|string|max:255',
+            'note' => 'nullable|string|max:1000',
+        ]);
 
-public function destroy(Mood $mood)
-{
-    $mood->delete();
+        $mood->update($request->only('mood', 'note'));
 
-    return redirect()->route('moods.index')->with('success', 'Mood deleted.');
-}
+        return redirect()->route('moods.index')->with('success', 'Mood updated!');
+    }
 
+    public function destroy(Mood $mood)
+    {
+        if ($mood->user_id !== Auth::id()) abort(403);
+        $mood->delete();
+
+        return redirect()->route('moods.index')->with('success', 'Mood deleted.');
+    }
 }

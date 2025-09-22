@@ -14,9 +14,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/wellness', [WellnessController::class, 'index'])->name('wellness.index');
-Route::get('/support', [SupportController::class, 'index'])->name('support.index');
-
 Route::get('/dashboard', [UserDashboardController::class, 'index'])
     ->middleware(['auth', 'trackLastLogin'])->name('dashboard');
 
@@ -32,11 +29,25 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('moods', MoodController::class);
+    Route::get('/moods/partial/index', [MoodController::class, 'partialIndex'])->name('moods.partial.index');
+    Route::get('/moods/partial/create', [MoodController::class, 'partialCreate'])->name('moods.partial.create');
+    Route::get('/moods/partial/edit/{mood}', [MoodController::class, 'partialEdit'])->name('moods.partial.edit');
+    Route::get('/moods/partial/show/{mood}', [MoodController::class, 'partialShow'])->name('moods.partial.show');
 });
-Route::middleware('auth')->group(function () {
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/journals', [JournalController::class, 'index'])->name('journals.index');
     Route::get('/journals/create', [JournalController::class, 'create'])->name('journals.create');
     Route::post('/journals', [JournalController::class, 'store'])->name('journals.store');
+    Route::get('/journals/partial/index', [JournalController::class, 'partialIndex'])->name('journals.partial.index');
+    Route::get('/journals/partial/create', [JournalController::class, 'partialCreate'])->name('journals.partial.create');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/wellness', [WellnessController::class, 'index'])->name('wellness.index');
+    Route::get('/wellness/partial', [WellnessController::class, 'partialIndex'])->name('wellness.partial');
+    Route::get('/support', [SupportController::class, 'index'])->name('support.index');
+    Route::get('/support/partial', [SupportController::class, 'partialIndex'])->name('support.partial');
 });
 
 require __DIR__.'/auth.php';

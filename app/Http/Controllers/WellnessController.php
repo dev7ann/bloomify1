@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 
 class WellnessController extends Controller
 {
-    public function index ()
+    public function index()
     {
-        return view ('wellness.index'); 
+        return view('wellness.index');
+    }
+
+    public function partialIndex()
+    {
+        return view('wellness.partial.index');
     }
 }

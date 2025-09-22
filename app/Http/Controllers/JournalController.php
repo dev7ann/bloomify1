@@ -10,8 +10,14 @@ class JournalController extends Controller
 {
     public function index()
     {
-        $journals = Journal::where('user_id', Auth::id())->latest()->get();
+        $journals = Auth::user()->journals()->latest()->get();
         return view('journals.index', compact('journals'));
+    }
+
+    public function partialIndex()
+    {
+        $journals = Auth::user()->journals()->latest()->get();
+        return view('journals.partial.index', compact('journals'));
     }
 
     public function create()
@@ -19,16 +25,21 @@ class JournalController extends Controller
         return view('journals.create');
     }
 
+    public function partialCreate()
+    {
+        return view('journals.partial.create');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'title'   => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
 
         Journal::create([
             'user_id' => Auth::id(),
-            'title'   => $request->title,
+            'title' => $request->title,
             'content' => $request->content,
         ]);
 
