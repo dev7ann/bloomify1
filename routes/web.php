@@ -9,6 +9,7 @@ use App\Http\Controllers\MoodController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\WellnessController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\TrendsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +22,8 @@ Route::prefix('admin')->middleware(['auth', 'admin', 'trackLastLogin'])->group(f
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 });
 
+Route::get('/trends/partial/index', [TrendsController::class, 'partialIndex'])->name('trends.partial.index');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -29,10 +32,11 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('moods', MoodController::class);
-    Route::get('/moods/partial/index', [MoodController::class, 'partialIndex'])->name('moods.partial.index');
-    Route::get('/moods/partial/create', [MoodController::class, 'partialCreate'])->name('moods.partial.create');
-    Route::get('/moods/partial/edit/{mood}', [MoodController::class, 'partialEdit'])->name('moods.partial.edit');
-    Route::get('/moods/partial/show/{mood}', [MoodController::class, 'partialShow'])->name('moods.partial.show');
+    Route::get('/moods', [MoodController::class, 'index'])->name('moods.index');
+    Route::post('/moods', [MoodController::class, 'store'])->name('moods.store');
+    Route::get('/moods/{mood}', [MoodController::class, 'show'])->name('moods.show');
+    Route::put('/moods/{mood}', [MoodController::class, 'update'])->name('moods.update');
+    Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.destroy');
 });
 
 Route::middleware(['auth'])->group(function () {

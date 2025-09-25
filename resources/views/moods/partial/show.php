@@ -1,32 +1,49 @@
-<?php
-$mood = isset($mood) ? $mood : new stdClass();
-$mood->mood = isset($mood->mood) ? $mood->mood : '';
-$mood->note = isset($mood->note) ? $mood->note : '';
-$mood->created_at = isset($mood->created_at) ? new DateTime($mood->created_at) : new DateTime();
-?>
+<!-- resources/views/moods/partial/show.blade.php -->
+<div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-purple-800 mb-4">Mood Details</h2>
 
-<div class="container">
-    <h2>Mood Details</h2>
-
-    <div class="card">
+    <div class="card bg-white border border-gray-200 p-4 rounded-md shadow-sm">
         <div class="card-body">
-            <h4 class="card-title"><?php echo htmlspecialchars($mood->mood); ?></h4>
-            <p class="card-text"><?php echo htmlspecialchars($mood->note) ?: 'No additional notes.'; ?></p>
-            <small class="text-muted">Logged: <?php echo $mood->created_at->format('D, M d, Y, h:i A'); ?></small>
+            <h4 class="text-xl font-semibold text-gray-800 mb-2">
+                {!! $this->getMoodEmoji($mood->feeling) !!} {{ $mood->feeling }}
+            </h4>
+            <p class="text-gray-600 mb-2">{{ $mood->note ?: 'No additional notes.' }}</p>
+            <small class="text-gray-500">Logged: {{ $mood->created_at->format('D, M d, Y, h:i A') }}</small>
         </div>
     </div>
 
-    <a data-feature="moods-edit" data-url="/moods/partial/edit/<?php echo $mood->id; ?>" class="btn btn-warning">Edit</a>
-    <form action="/moods/<?php echo $mood->id; ?>" method="POST" style="display:inline">
-        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-        <input type="hidden" name="_method" value="DELETE">
-        <button class="btn btn-danger">Delete</button>
-    </form>
-    <a data-feature="moods-index" data-url="/moods/partial/index" class="btn btn-secondary">Back</a>
+    <div class="mt-4">
+        <a href="#" class="ajax-link bg-yellow-400 text-black px-4 py-2 rounded-md mr-2" data-url="/moods/partial/edit/{{ $mood->id }}">
+            Edit
+        </a>
+        <form action="{{ route('moods.destroy', $mood->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+            @csrf
+            @method('DELETE')
+            <button class="bg-red-600 text-white px-4 py-2 rounded-md">Delete</button>
+        </form>
+        <a href="#" class="ajax-link bg-gray-200 text-gray-800 px-4 py-2 rounded-md ml-2" data-url="/moods/partial/index">
+            Back
+        </a>
+    </div>
 </div>
 
+@php
+    // Same helper as in index
+    private function getMoodEmoji($feeling) {
+        $emojis = [
+            'rad' => '<span class="text-2xl" style="color: orange;">😁</span>',
+            'good' => '<span class="text-2xl" style="color: green;">😊</span>',
+            'meh' => '<span class="text-2xl" style="color: purple;">😐</span>',
+            'bad' => '<span class="text-2xl" style="color: blue;">☹️</span>',
+            'awful' => '<span class="text-2xl" style="color: gray;">😞</span>',
+        ];
+        return $emojis[$feeling] ?? '<span class="text-2xl">😶</span>';
+    }
+@endphp
+
 <script>
-    document.querySelectorAll('[data-feature="moods-edit"], [data-feature="moods-index"]').forEach(link => {
+    // AJAX for buttons, similar to others
+    document.querySelectorAll('.ajax-link').forEach(link => {
         link.addEventListener('click', async (e) => {
             e.preventDefault();
             const url = link.getAttribute('data-url');
@@ -37,12 +54,30 @@ $mood->created_at = isset($mood->created_at) ? new DateTime($mood->created_at) :
                 });
                 if (response.ok) {
                     contentArea.innerHTML = await response.text();
-                } else {
-                    contentArea.innerHTML = '<p class="text-red-600">Error loading content. Try again later.</p>';
                 }
             } catch (error) {
-                contentArea.innerHTML = '<p class="text-red-600">Error loading content: ' + error.message + '</p>';
+                console.error('Error:', error);
             }
         });
+    });
+
+    // For delete
+    document.querySelector('form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        try {
+            const response = await fetch(e.target.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            if (response.ok) {
+                const contentArea = document.getElementById('content-area');
+                const indexResponse = await fetch('/moods/partial/index');
+                contentArea.innerHTML = await indexResponse.text();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     });
 </script>
