@@ -18,18 +18,44 @@
         @foreach ($moods as $mood)
             <div class="mood-entry bg-white border border-gray-200 p-4 rounded-md mb-4 shadow-sm">
                 <p class="font-semibold text-gray-800">
-                    {!! $this->getMoodEmoji($mood->feeling) !!} {{ $mood->feeling }} - {{ $mood->note ?? 'No note' }}
+                    @switch($mood->feeling)
+                        @case('rad')
+                            <span class="text-2xl" style="color: orange;">😁</span>
+                            @break
+                        @case('good')
+                            <span class="text-2xl" style="color: green;">😊</span>
+                            @break
+                        @case('meh')
+                            <span class="text-2xl" style="color: purple;">😐</span>
+                            @break
+                        @case('bad')
+                            <span class="text-2xl" style="color: blue;">☹️</span>
+                            @break
+                        @case('awful')
+                            <span class="text-2xl" style="color: gray;">😞</span>
+                            @break
+                        @default
+                            <span class="text-2xl">😶</span>
+                    @endswitch
+                    {{ $mood->feeling }} - {{ $mood->note ?? 'No note' }}
                 </p>
                 <p class="text-sm text-gray-500">{{ $mood->created_at->format('M d, Y, h:i A') }}</p>
 
                 <div class="mt-2">
-                    <a href="#" class="ajax-link bg-yellow-400 text-black px-3 py-1 rounded-md mr-2" data-url="/moods/partial/edit/{{ $mood->id }}">
+                    <a href="#" 
+                       class="ajax-link bg-yellow-400 text-black px-3 py-1 rounded-md mr-2" 
+                       data-url="/moods/partial/edit/{{ $mood->id }}">
                         Edit
                     </a>
-                    <form method="POST" action="{{ route('moods.destroy', $mood->id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this mood?');">
+                    <form method="POST" 
+                          action="{{ route('moods.destroy', $mood->id) }}" 
+                          style="display:inline;" 
+                          onsubmit="return confirm('Are you sure you want to delete this mood?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded-md">Delete</button>
+                        <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded-md">
+                            Delete
+                        </button>
                     </form>
                 </div>
             </div>
@@ -37,22 +63,8 @@
     @endif
 </div>
 
-@php
-    // Helper function to get emoji with color styling
-    private function getMoodEmoji($feeling) {
-        $emojis = [
-            'rad' => '<span class="text-2xl" style="color: orange;">😁</span>',
-            'good' => '<span class="text-2xl" style="color: green;">😊</span>',
-            'meh' => '<span class="text-2xl" style="color: purple;">😐</span>',
-            'bad' => '<span class="text-2xl" style="color: blue;">☹️</span>',
-            'awful' => '<span class="text-2xl" style="color: gray;">😞</span>',
-        ];
-        return $emojis[$feeling] ?? '<span class="text-2xl">😶</span>';
-    }
-@endphp
-
 <script>
-    // Assuming you have global AJAX handler, but adding for delete refresh
+    // Delete form handling with AJAX refresh
     document.querySelectorAll('form[method="POST"]').forEach(form => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -64,7 +76,7 @@
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 });
                 if (response.ok) {
-                    // Refresh index partial
+                    // Refresh moods partial
                     const contentArea = document.getElementById('content-area');
                     const indexResponse = await fetch('/moods/partial/index');
                     contentArea.innerHTML = await indexResponse.text();
@@ -73,5 +85,20 @@
                 console.error('Error:', error);
             }
         });
+    });
+
+    // General AJAX navigation handler
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('ajax-link')) {
+            e.preventDefault();
+            const url = e.target.getAttribute('data-url');
+
+            fetch(url)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('content-area').innerHTML = html;
+                })
+                .catch(err => console.error('Error loading partial:', err));
+        }
     });
 </script>

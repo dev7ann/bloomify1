@@ -189,7 +189,7 @@ $userName = isset(Auth::user()->name) ? Auth::user()->name : 'User';
     </div>
     <button class="toggle-btn"><i class="fas fa-chevron-left"></i></button>
     <nav>
-      <a data-feature="moods" data-url="/moods" class="active"><i class="fas fa-smile"></i><span>Mood Tracker</span></a>
+      <a data-feature="moods" data-url="/moods/partial/index" class="active"><i class="fas fa-smile"></i><span>Mood Tracker</span></a>
       <a data-feature="journals" data-url="/journals/partial/index"><i class="fas fa-book"></i><span>Journal</span></a>
       <a data-feature="trends" data-url="/trends/partial/index"><i class="fas fa-chart-line"></i><span>Mood Trends</span></a>
       <a data-feature="wellness" data-url="/wellness/partial"><i class="fas fa-leaf"></i><span>Wellness Tips</span></a>

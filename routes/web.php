@@ -31,13 +31,16 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('moods', MoodController::class);
     Route::get('/moods', [MoodController::class, 'index'])->name('moods.index');
-    Route::post('/moods', [MoodController::class, 'store'])->name('moods.store');
-    Route::get('/moods/{mood}', [MoodController::class, 'show'])->name('moods.show');
-    Route::put('/moods/{mood}', [MoodController::class, 'update'])->name('moods.update');
     Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.destroy');
+    Route::post('/moods', [MoodController::class, 'store'])->name('moods.store');
+    Route::put('/moods/{mood}', [MoodController::class, 'update'])->name('moods.update');
+    Route::get('/moods/partial/index', [MoodController::class, 'partialIndex'])->name('moods.partial.index');
+    Route::get('/moods/partial/create', [MoodController::class, 'partialCreate'])->name('moods.partial.create');
+    Route::get('/moods/partial/edit/{mood}', [MoodController::class, 'partialEdit'])->name('moods.partial.edit');
 });
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/journals', [JournalController::class, 'index'])->name('journals.index');

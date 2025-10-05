@@ -72,22 +72,36 @@
     });
 
     // AJAX submit and refresh index
-    document.getElementById('mood-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        try {
-            const response = await fetch(e.target.action, {
-                method: 'POST',
-                body: formData,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
-            if (response.ok) {
-                const contentArea = document.getElementById('content-area');
-                const indexResponse = await fetch('/moods/partial/index');
-                contentArea.innerHTML = await indexResponse.text();
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('mood-form');
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // ✅ stop full reload
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (response.ok) {
+                    const contentArea = document.getElementById('content-area');
+                    const indexResponse = await fetch('/moods/partial/index');
+                    contentArea.innerHTML = await indexResponse.text();
+                } else {
+                    console.error('Failed to submit mood:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
+        });
+    }
+});
+</script>
+
 </script>
