@@ -11,7 +11,7 @@ class Mood extends Model
 
     protected $fillable = [
         'user_id',
-        'mood',
+        'feeling',
         'note',
     ];
 

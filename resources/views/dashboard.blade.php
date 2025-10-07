@@ -213,54 +213,175 @@ $userName = isset(Auth::user()->name) ? Auth::user()->name : 'User';
   </div>
 
   <script>
-  async function loadContent(url) {
-    const contentArea = document.getElementById('content-area');
-    try {
+async function loadContent(url) {
+  const contentArea = document.getElementById('content-area');
+  try {
+    const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+    if (response.ok) {
+      contentArea.innerHTML = await response.text();
+      attachAllHandlers(); // reattach everything for new content
+    } else {
+      contentArea.innerHTML = '<p class="text-red-600">Error loading content. Try again later.</p>';
+    }
+  } catch (error) {
+    contentArea.innerHTML = '<p class="text-red-600">Error: ' + error.message + '</p>';
+  }
+}
+
+// Sidebar navigation
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', async (e) => {
+    e.preventDefault();
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    link.classList.add('active');
+    loadContent(link.getAttribute('data-url'));
+  });
+});
+
+// Handles any dynamic links (buttons inside partials)
+function attachDynamicLinks() {
+  document.querySelectorAll('.ajax-link').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const url = btn.getAttribute('data-url');
+      if (!url) return;
       const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+      const html = await response.text();
+      document.getElementById('content-area').innerHTML = html;
+      attachAllHandlers();
+    });
+  });
+}
+
+// Mood form handler
+function attachMoodFormHandler() {
+  const form = document.querySelector('#mood-form');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      });
       if (response.ok) {
-        contentArea.innerHTML = await response.text();
-        attachDynamicLinks(); // reattach for new buttons inside partial
-      } else {
-        contentArea.innerHTML = '<p class="text-red-600">Error loading content. Try again later.</p>';
+        const html = await response.text();
+        document.getElementById('content-area').innerHTML = html;
+        attachAllHandlers();
       }
     } catch (error) {
-      contentArea.innerHTML = '<p class="text-red-600">Error: ' + error.message + '</p>';
+      console.error('Mood form error:', error);
     }
-  }
+  });
+}
 
-  // Attach clicks to sidebar links
-  document.querySelectorAll('nav a').forEach(link => {
-    link.addEventListener('click', async (e) => {
+// Journal Create + Save handlers
+function attachJournalHandlers() {
+  // Handle "Write New Journal" button
+  document.querySelectorAll('[data-feature="journals-create"]').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
       e.preventDefault();
-      document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-      link.classList.add('active');
-      loadContent(link.getAttribute('data-url'));
-    });
-  });
-
-  // Attach clicks for dynamic buttons in partials
-  function attachDynamicLinks() {
-    document.querySelectorAll('.ajax-link').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const url = btn.getAttribute('data-url');
-        if (url) {
-          loadContent(url);
+      const url = btn.getAttribute('data-url');
+      const contentArea = document.getElementById('content-area');
+      try {
+        const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+        if (response.ok) {
+          contentArea.innerHTML = await response.text();
+          attachAllHandlers(); // when journal form loads
+        } else {
+          contentArea.innerHTML = '<p class="text-red-600">Error loading journal form.</p>';
         }
-      });
+      } catch (error) {
+        console.error('Error loading journal form:', error);
+      }
     });
-  }
-
-  // Run on first load
-  attachDynamicLinks();
-
-  // Sidebar toggle
-  const sidebar = document.querySelector('.sidebar');
-  const toggleBtn = document.querySelector('.toggle-btn');
-  toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('collapsed');
   });
+}
+
+function attachJournalFormHandler() {
+  const form = document.querySelector('form[action="/journals"]');
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      });
+
+      if (response.ok) {
+        // Reload journal list after saving
+        const indexResponse = await fetch('/journals/partial/index', {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        const html = await indexResponse.text();
+        document.getElementById('content-area').innerHTML = html;
+        attachAllHandlers();
+      } else {
+        alert('Failed to save journal entry.');
+      }
+    } catch (error) {
+      console.error('Error submitting journal form:', error);
+    }
+  });
+}
+
+// Delete mood handler
+function attachDeleteHandlers() {
+  document.querySelectorAll('form.delete-mood-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!confirm('Are you sure you want to delete this mood?')) return;
+
+      const formData = new FormData(form);
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+
+        if (response.ok) {
+          const indexResponse = await fetch('/moods/partial/index', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          });
+          const html = await indexResponse.text();
+          document.getElementById('content-area').innerHTML = html;
+          attachAllHandlers();
+        }
+      } catch (error) {
+        console.error('Error deleting mood:', error);
+      }
+    });
+  });
+}
+
+// Attach all handlers after loading new content
+function attachAllHandlers() {
+  attachDynamicLinks();
+  attachMoodFormHandler();
+  attachDeleteHandlers();
+  attachJournalHandlers();
+  attachJournalFormHandler();
+}
+
+// Initial run
+attachAllHandlers();
+
+// Sidebar toggle
+const sidebar = document.querySelector('.sidebar');
+const toggleBtn = document.querySelector('.toggle-btn');
+toggleBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('collapsed');
+});
 </script>
+
 
 </body>
 </html>

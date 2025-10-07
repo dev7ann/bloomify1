@@ -7,10 +7,59 @@ function str_limit($string, $length) {
 }
 ?>
 
+<style>
+.btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #7e22ce; /* Purple tone */
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #6b21a8;
+  transform: scale(1.05);
+}
+
+.btn-secondary {
+  background-color: #e5e7eb; /* Light gray */
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+  transform: scale(1.05);
+}
+
+.success-message {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.no-entries {
+  color: #6b7280;
+  margin-top: 15px;
+  font-style: italic;
+}
+</style>
+
 <div class="container">
     <h2>My Journal Entries 📔</h2>
 
     <a data-feature="journals-create" data-url="/journals/partial/create" class="btn btn-primary">Write New Journal</a>
+
 
     <?php if ($success) { ?>
         <div class="success-message"><?php echo htmlspecialchars($success); ?></div>
@@ -29,7 +78,7 @@ function str_limit($string, $length) {
     <?php } ?>
 </div>
 
-<script>
+{{-- <script>
     document.querySelectorAll('[data-feature="journals-create"]').forEach(link => {
         link.addEventListener('click', async (e) => {
             e.preventDefault();
@@ -49,4 +98,4 @@ function str_limit($string, $length) {
             }
         });
     });
-</script>
+</script> --}}

@@ -1,6 +1,5 @@
-<!-- resources/views/moods/partial/create.blade.php -->
 <div class="mood-picker container mx-auto p-6 bg-white rounded-lg shadow-md">
-    <h2 class="text-2xl font-bold text-gray-800 mb-2">HOW ARE YOU?</h2>
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">How are you?</h2>
     <p class="text-purple-600 mb-6 flex items-center">
         <span class="mr-2">📅</span> Today, {{ now()->format('d M, H:i') }}
     </p>
@@ -11,9 +10,9 @@
             @foreach (['rad' => '😁', 'good' => '😊', 'meh' => '😐', 'bad' => '☹️', 'awful' => '😞'] as $value => $emoji)
                 <label class="cursor-pointer">
                     <input type="radio" name="feeling" value="{{ $value }}" class="hidden" required>
-                    <div class="text-center">
+                    <div class="text-center hover:scale-110 transition-transform">
                         <span class="text-6xl block">{{ $emoji }}</span>
-                        <p class="text-gray-600">{{ $value }}</p>
+                        <p class="text-gray-600 capitalize">{{ $value }}</p>
                     </div>
                 </label>
             @endforeach
@@ -25,48 +24,31 @@
         </div>
 
         <div class="flex justify-end items-center space-x-2">
-            <button type="submit" class="bg-purple-600 text-white rounded-full p-4">
-                ➡️
-            </button>
-            <span class="text-purple-600 font-semibold">LOG MOOD</span>
+            <button type="submit" class="bg-purple-600 text-white rounded-full px-5 py-3">Log Mood</button>
         </div>
     </form>
 </div>
 
-<script>
-    // Highlight selected emoji
-    document.querySelectorAll('input[name="feeling"]').forEach(input => {
-        input.addEventListener('change', () => {
-            document.querySelectorAll('.mood-picker label div').forEach(div => 
-                div.classList.remove('border-2', 'border-purple-600')
-            );
-            input.nextElementSibling.classList.add('border-2', 'border-purple-600');
-        });
-    });
+{{-- <script>
+function initMoodForm() {
+    const form = document.querySelector('#mood-form');
+    if (!form) return;
 
-    // AJAX submit and refresh index dynamically
-    document.getElementById('mood-form').addEventListener('submit', async (e) => {
+    const contentArea = document.getElementById('content-area');
+
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-
-        try {
-            const response = await fetch(e.target.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'text/html'
-                }
-            });
-
-            if (response.ok) {
-                const html = await response.text();
-                document.getElementById('content-area').innerHTML = html;
-            } else {
-                console.error('Failed to log mood:', response.status);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: formData
+        });
+        if (response.ok) {
+            contentArea.innerHTML = await response.text();
         }
     });
-</script>
+}
+
+initMoodForm();
+</script> --}}
