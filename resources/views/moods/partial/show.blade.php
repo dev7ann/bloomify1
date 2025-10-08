@@ -31,11 +31,12 @@
     // Same helper as in index
     private function getMoodEmoji($feeling) {
         $emojis = [
-            'rad' => '<span class="text-2xl" style="color: orange;">😁</span>',
-            'good' => '<span class="text-2xl" style="color: green;">😊</span>',
-            'meh' => '<span class="text-2xl" style="color: purple;">😐</span>',
-            'bad' => '<span class="text-2xl" style="color: blue;">☹️</span>',
-            'awful' => '<span class="text-2xl" style="color: gray;">😞</span>',
+           'happy' => '<span class="text-2xl" style="color: orange;">😁</span>',
+            'calm' => '<span class="text-2xl" style="color: green;">😊</span>',
+            'excited' => '<span class="text-2xl" style="color: purple;">🤩</span>',
+            'anxious' => '<span class="text-2xl" style="color: blue;">😟</span>',
+            'sad' => '<span class="text-2xl" style="color: gray;">😞</span>',
+
         ];
         return $emojis[$feeling] ?? '<span class="text-2xl">😶</span>';
     }

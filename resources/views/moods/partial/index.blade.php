@@ -13,13 +13,14 @@
             <div class="mood-entry bg-white border border-gray-200 p-4 rounded-md mb-4 shadow-sm">
                 <p class="font-semibold text-gray-800">
                     @switch($mood->feeling)
-                        @case('rad') <span class="text-2xl" style="color: orange;">😁</span> @break
-                        @case('good') <span class="text-2xl" style="color: green;">😊</span> @break
-                        @case('meh') <span class="text-2xl" style="color: purple;">😐</span> @break
-                        @case('bad') <span class="text-2xl" style="color: blue;">☹️</span> @break
-                        @case('awful') <span class="text-2xl" style="color: gray;">😞</span> @break
-                        @default <span class="text-2xl">😶</span>
-                    @endswitch
+    @case('happy') <span class="text-2xl" style="color: orange;">😁</span> @break
+    @case('calm') <span class="text-2xl" style="color: green;">😊</span> @break
+    @case('excited') <span class="text-2xl" style="color: purple;">😐</span> @break
+    @case('anxious') <span class="text-2xl" style="color: blue;">☹️</span> @break
+    @case('sad') <span class="text-2xl" style="color: gray;">😞</span> @break
+    @default <span class="text-2xl">😶</span>
+@endswitch
+
                     {{ ucfirst($mood->feeling) }} — {{ $mood->note ?? 'No note' }}
                 </p>
                 <p class="text-sm text-gray-500">{{ $mood->created_at->format('M d, Y, h:i A') }}</p>

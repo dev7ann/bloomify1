@@ -10,38 +10,38 @@
         @method('PUT')
         <div class="flex justify-around mb-8">
             <label class="cursor-pointer">
-                <input type="radio" name="feeling" value="rad" class="hidden" {{ $mood->feeling == 'rad' ? 'checked' : '' }} required>
-                <div class="text-center {{ $mood->feeling == 'rad' ? 'border-2 border-purple-600' : '' }}">
+                <input type="radio" name="feeling" value="happy" class="hidden" {{ $mood->feeling == 'happy' ? 'checked' : '' }} required>
+                <div class="text-center {{ $mood->feeling == 'happy' ? 'border-2 border-purple-600' : '' }}">
                     <span class="text-6xl block" style="color: orange;">😁</span>
-                    <p class="text-gray-600">rad</p>
+                    <p class="text-gray-600">happy</p>
                 </div>
             </label>
             <label class="cursor-pointer">
-                <input type="radio" name="feeling" value="good" class="hidden" {{ $mood->feeling == 'good' ? 'checked' : '' }} required>
-                <div class="text-center {{ $mood->feeling == 'good' ? 'border-2 border-purple-600' : '' }}">
+                <input type="radio" name="feeling" value="calm" class="hidden" {{ $mood->feeling == 'calm' ? 'checked' : '' }} required>
+                <div class="text-center {{ $mood->feeling == 'calm' ? 'border-2 border-purple-600' : '' }}">
                     <span class="text-6xl block" style="color: green;">😊</span>
-                    <p class="text-gray-600">good</p>
+                    <p class="text-gray-600">calm</p>
                 </div>
             </label>
             <label class="cursor-pointer">
-                <input type="radio" name="feeling" value="meh" class="hidden" {{ $mood->feeling == 'meh' ? 'checked' : '' }} required>
-                <div class="text-center {{ $mood->feeling == 'meh' ? 'border-2 border-purple-600' : '' }}">
+                <input type="radio" name="feeling" value="excited" class="hidden" {{ $mood->feeling == 'excited' ? 'checked' : '' }} required>
+                <div class="text-center {{ $mood->feeling == 'excited' ? 'border-2 border-purple-600' : '' }}">
                     <span class="text-6xl block" style="color: purple;">😐</span>
-                    <p class="text-gray-600">meh</p>
+                    <p class="text-gray-600">excited</p>
                 </div>
             </label>
             <label class="cursor-pointer">
-                <input type="radio" name="feeling" value="bad" class="hidden" {{ $mood->feeling == 'bad' ? 'checked' : '' }} required>
-                <div class="text-center {{ $mood->feeling == 'bad' ? 'border-2 border-purple-600' : '' }}">
+                <input type="radio" name="feeling" value="anxious" class="hidden" {{ $mood->feeling == 'anxious' ? 'checked' : '' }} required>
+                <div class="text-center {{ $mood->feeling == 'anxious' ? 'border-2 border-purple-600' : '' }}">
                     <span class="text-6xl block" style="color: blue;">☹️</span>
-                    <p class="text-gray-600">bad</p>
+                    <p class="text-gray-600">anxious</p>
                 </div>
             </label>
             <label class="cursor-pointer">
-                <input type="radio" name="feeling" value="awful" class="hidden" {{ $mood->feeling == 'awful' ? 'checked' : '' }} required>
-                <div class="text-center {{ $mood->feeling == 'awful' ? 'border-2 border-purple-600' : '' }}">
+                <input type="radio" name="feeling" value="sad" class="hidden" {{ $mood->feeling == 'sad' ? 'checked' : '' }} required>
+                <div class="text-center {{ $mood->feeling == 'sad' ? 'border-2 border-purple-600' : '' }}">
                     <span class="text-6xl block" style="color: gray;">😞</span>
-                    <p class="text-gray-600">awful</p>
+                    <p class="text-gray-600">sad</p>
                 </div>
             </label>
         </div>

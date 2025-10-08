@@ -15,9 +15,13 @@ class TrendsController extends Controller
         }
 
         $userId = Auth::id();
-        // Fetch moods for the past 28 days
+
+        // Get moods for the current week (Monday–Sunday)
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
         $moods = Mood::where('user_id', $userId)
-            ->where('created_at', '>=', Carbon::now()->subDays(28))
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->orderBy('created_at')
             ->get();
 
@@ -30,25 +34,22 @@ class TrendsController extends Controller
             'sad' => 1
         ];
 
-        // Prepare daily mood scores
+        // Prepare daily averages for each day of the week
         $dailyScores = [];
         $dailyLabels = [];
-        $currentDate = Carbon::now()->startOfDay();
-        for ($i = 27; $i >= 0; $i--) {
-            $date = $currentDate->copy()->subDays($i);
-            $dayMoods = $moods->filter(function ($mood) use ($date) {
-                return Carbon::parse($mood->created_at)->startOfDay()->equalTo($date);
-            });
-            $score = $dayMoods->isEmpty() ? 0 : $dayMoods->avg(function ($mood) use ($moodMap) {
-                return $moodMap[strtolower($mood->mood)] ?? 0;
-            });
-            $dailyScores[] = round($score, 1);
-            $dailyLabels[] = $date->format('M d');
-        }
 
-        // Debug: Check if data exists
-        if (empty($dailyScores) || array_sum($dailyScores) == 0) {
-            \Log::info('No mood data for user ' . $userId . ': ', $dailyScores);
+        for ($i = 0; $i < 7; $i++) {
+            $date = $startOfWeek->copy()->addDays($i);
+            $dayMoods = $moods->filter(function ($mood) use ($date) {
+                return Carbon::parse($mood->created_at)->isSameDay($date);
+            });
+
+            $score = $dayMoods->isEmpty()
+                ? 0
+                : $dayMoods->avg(fn($mood) => $moodMap[strtolower($mood->mood)] ?? 0);
+
+            $dailyScores[] = round($score, 1);
+            $dailyLabels[] = $date->format('D'); // Mon, Tue, Wed...
         }
 
         return view('trends.partial.index', [

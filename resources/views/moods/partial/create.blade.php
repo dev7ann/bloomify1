@@ -7,7 +7,7 @@
     <form action="{{ route('moods.store') }}" method="POST" id="mood-form">
         @csrf
         <div class="flex justify-around mb-8">
-            @foreach (['rad' => '😁', 'good' => '😊', 'meh' => '😐', 'bad' => '☹️', 'awful' => '😞'] as $value => $emoji)
+          @foreach (['happy' => '😁', 'calm' => '😊', 'excited' => '😐', 'anxious' => '☹️', 'sad' => '😞'] as $value => $emoji)
                 <label class="cursor-pointer">
                     <input type="radio" name="feeling" value="{{ $value }}" class="hidden" required>
                     <div class="text-center hover:scale-110 transition-transform">

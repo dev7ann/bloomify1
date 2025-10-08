@@ -212,6 +212,14 @@ $userName = isset(Auth::user()->name) ? Auth::user()->name : 'User';
     </div>
   </div>
 
+  {{-- <div id="trends-area"></div>
+<script>
+    fetch('{{ route('trends.partial.index') }}')
+        .then(response => response.text())
+        .then(html => document.getElementById('trends-area').innerHTML = html);
+</script> --}}
+
+
   <script>
 async function loadContent(url) {
   const contentArea = document.getElementById('content-area');

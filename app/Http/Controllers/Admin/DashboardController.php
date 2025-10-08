@@ -25,8 +25,8 @@ class DashboardController extends Controller
         // Mood and Journal analytics
         $totalMoods = Mood::count();
         $totalJournals = Journal::count();
-        $moodTrends = Mood::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, mood, COUNT(*) as count')
-            ->groupBy('month', 'mood')
+        $moodTrends = Mood::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, feeling, COUNT(*) as count')
+            ->groupBy('month', 'feeling')
             ->orderBy('month')
             ->get()
             ->groupBy('month')
