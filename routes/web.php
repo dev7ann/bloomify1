@@ -20,6 +20,16 @@ Route::get('/dashboard', [UserDashboardController::class, 'index'])
 
 Route::prefix('admin')->middleware(['auth', 'admin', 'trackLastLogin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // User management
+    Route::get('/users', [DashboardController::class, 'users'])->name('admin.users');
+    Route::put('/users/{user}/role', [DashboardController::class, 'updateRole']);
+    Route::delete('/users/{user}', [DashboardController::class, 'destroyUser']);
+
+    // Wellness tips
+    Route::post('/wellness-tips', [DashboardController::class, 'storeTip'])->name('admin.wellness.store');
+    Route::put('/wellness-tips/{tip}', [DashboardController::class, 'updateTip'])->name('admin.wellness.update');
+    Route::delete('/wellness-tips/{tip}', [DashboardController::class, 'destroyTip'])->name('admin.wellness.delete');
 });
 
 Route::get('/trends/partial/index', [TrendsController::class, 'partialIndex'])->name('trends.partial.index');

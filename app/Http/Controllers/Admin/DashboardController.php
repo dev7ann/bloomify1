@@ -33,7 +33,7 @@ class DashboardController extends Controller
             ->map(function ($group) {
                 $counts = ['happy' => 0, 'calm' => 0, 'excited' => 0, 'anxious' => 0, 'sad' => 0];
                 foreach ($group as $item) {
-                    $counts[strtolower($item->mood)] = $item->count;
+                    $counts[strtolower($item->feeling)] = $item->count;
                 }
                 return $counts;
             })->toArray();

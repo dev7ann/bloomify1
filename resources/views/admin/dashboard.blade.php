@@ -286,25 +286,28 @@ $error = session('error');
                 <tbody>
                     <?php foreach ($tips as $tip): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($tip->title); ?></td>
-                            <td><?php echo htmlspecialchars($tip->category ?? 'N/A'); ?></td>
-                            <td><?php echo htmlspecialchars($tip->creator ? $tip->creator->name : 'N/A'); ?></td>
-                            <td>
-                                <form action="/admin/wellness-tips/<?php echo $tip->id; ?>" method="POST" style="display:inline">
-                                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-                                    <input type="hidden" name="_method" value="PUT">
-                                    <input type="text" name="title" value="<?php echo htmlspecialchars($tip->title); ?>" class="form-control" required>
-                                    <textarea name="content" class="form-control" required><?php echo htmlspecialchars($tip->content); ?></textarea>
-                                    <input type="text" name="category" value="<?php echo htmlspecialchars($tip->category ?? ''); ?>" class="form-control">
-                                    <button type="submit" class="btn btn-primary">Update</button>
-                                </form>
-                                <form action="/admin/wellness-tips/<?php echo $tip->id; ?>" method="POST" style="display:inline">
-                                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button class="btn btn-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
+                        <td><?php echo htmlspecialchars($tip->title); ?></td>
+                        <td><?php echo htmlspecialchars($tip->category ?? 'General'); ?></td>
+                        <td><?php echo htmlspecialchars(optional($tip->creator)->name ?? 'Admin'); ?></td>
+                        <td>
+                            <!-- Edit Form -->
+                            <form action="/admin/wellness-tips/<?php echo $tip->id; ?>" method="POST" style="display:inline-block;">
+                                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                                <input type="hidden" name="_method" value="PUT">
+                                <input type="text" name="title" value="<?php echo htmlspecialchars($tip->title); ?>" class="form-control" style="width:150px;">
+                                <input type="text" name="category" value="<?php echo htmlspecialchars($tip->category); ?>" class="form-control" style="width:100px;">
+                                <textarea name="content" class="form-control" style="width:200px;"><?php echo htmlspecialchars($tip->content); ?></textarea>
+                                <button class="btn btn-primary" type="submit">Update</button>
+                            </form>
+
+                            <!-- Delete Button -->
+                            <form action="/admin/wellness-tips/<?php echo $tip->id; ?>" method="POST" style="display:inline-block;">
+                                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="btn btn-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
