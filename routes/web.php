@@ -19,7 +19,25 @@ Route::get('/dashboard', [UserDashboardController::class, 'index'])
     ->middleware(['auth', 'trackLastLogin'])->name('dashboard');
 
 Route::prefix('admin')->middleware(['auth', 'admin', 'trackLastLogin'])->group(function () {
+    // main dashboard (default)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // sidebar-linked pages (static for now)
+    Route::get('/dashboard-overview', function () {
+        return view('admin.dashboard-overview');
+    })->name('admin.dashboard.overview');
+
+    Route::get('/mood-analytics', function () {
+        return view('admin.mood-analytics');
+    })->name('admin.mood.analytics');
+
+    Route::get('/user-management', function () {
+        return view('admin.user-management');
+    })->name('admin.user.management');
+
+    Route::get('/wellness-tips', function () {
+        return view('admin.wellness-tips');
+    })->name('admin.wellness.tips');
 
     // User management
     Route::get('/users', [DashboardController::class, 'users'])->name('admin.users');

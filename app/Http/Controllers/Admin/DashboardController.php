@@ -59,6 +59,7 @@ class DashboardController extends Controller
             'signupTrends'
         ));
     }
+    
 
     public function users(Request $request)
     {
