@@ -16,10 +16,11 @@ class TrendsController extends Controller
 
         $userId = Auth::id();
 
-        // Get moods for the current week (Monday–Sunday)
+        // Define week (Monday → Sunday)
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek = Carbon::now()->endOfWeek();
 
+        // Fetch moods for the current week
         $moods = Mood::where('user_id', $userId)
             ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->orderBy('created_at')
@@ -34,27 +35,28 @@ class TrendsController extends Controller
             'sad' => 1
         ];
 
-        // Prepare daily averages for each day of the week
-        $dailyScores = [];
         $dailyLabels = [];
+        $dailyScores = [];
 
+        // Loop through each day of the week
         for ($i = 0; $i < 7; $i++) {
             $date = $startOfWeek->copy()->addDays($i);
             $dayMoods = $moods->filter(function ($mood) use ($date) {
                 return Carbon::parse($mood->created_at)->isSameDay($date);
             });
 
+            // Average mood score if exists, otherwise null (gap)
             $score = $dayMoods->isEmpty()
-                ? 0
-                : $dayMoods->avg(fn($mood) => $moodMap[strtolower($mood->mood)] ?? 0);
+                ? null
+                : round($dayMoods->avg(fn($mood) => $moodMap[strtolower($mood->mood)] ?? 0), 1);
 
-            $dailyScores[] = round($score, 1);
             $dailyLabels[] = $date->format('D'); // Mon, Tue, Wed...
+            $dailyScores[] = $score;
         }
 
         return view('trends.partial.index', [
-            'dailyScores' => $dailyScores,
-            'dailyLabels' => $dailyLabels
+            'dailyLabels' => $dailyLabels,
+            'dailyScores' => $dailyScores
         ]);
     }
 }

@@ -193,7 +193,7 @@ $userName = isset(Auth::user()->name) ? Auth::user()->name : 'User';
       <a data-feature="journals" data-url="/journals/partial/index"><i class="fas fa-book"></i><span>Journal</span></a>
       <a data-feature="trends" data-url="/trends/partial/index"><i class="fas fa-chart-line"></i><span>Mood Trends</span></a>
       <a data-feature="wellness" data-url="/wellness/partial"><i class="fas fa-leaf"></i><span>Wellness Tips</span></a>
-      <a data-feature="support" data-url="/support/partial"><i class="fas fa-question-circle"></i><span>Support</span></a>
+      {{-- <a data-feature="support" data-url="/support/partial"><i class="fas fa-question-circle"></i><span>Support</span></a> --}}
     </nav>
     <div class="logout-form">
       <form method="POST" action="/logout">
@@ -219,22 +219,76 @@ $userName = isset(Auth::user()->name) ? Auth::user()->name : 'User';
         .then(html => document.getElementById('trends-area').innerHTML = html);
 </script> --}}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+function renderMoodChart() {
+  const canvas = document.getElementById('moodChart');
+  if (!canvas) return;
+
+  const labels = JSON.parse(canvas.dataset.labels);
+  const scores = JSON.parse(canvas.dataset.scores);
+
+  // Convert 0s to nulls → gaps instead of fake data
+  const cleanScores = scores.map(s => s === 0 ? null : s);
+
+  new Chart(canvas.getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Mood Trend',
+        data: cleanScores,
+        borderWidth: 2,
+        tension: 0.4,
+        spanGaps: false
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          min: 1,
+          max: 5,
+          title: {
+            display: true,
+            text: 'Mood Level'
+          }
+        }
+      }
+    }
+  });
+}
+</script>
+
+
+
 
   <script>
 async function loadContent(url) {
   const contentArea = document.getElementById('content-area');
+
   try {
-    const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-    if (response.ok) {
-      contentArea.innerHTML = await response.text();
-      attachAllHandlers(); // reattach everything for new content
-    } else {
-      contentArea.innerHTML = '<p class="text-red-600">Error loading content. Try again later.</p>';
-    }
+    const response = await fetch(url, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+
+    if (!response.ok) throw new Error('Failed to load');
+
+    contentArea.innerHTML = await response.text();
+
+    // 🔑 Render chart AFTER HTML exists
+    renderMoodChart();
+
+    attachAllHandlers();
+
   } catch (error) {
-    contentArea.innerHTML = '<p class="text-red-600">Error: ' + error.message + '</p>';
+    contentArea.innerHTML =
+      '<p class="text-red-600">Error loading content</p>';
   }
 }
+
+
 
 // Sidebar navigation
 document.querySelectorAll('nav a').forEach(link => {

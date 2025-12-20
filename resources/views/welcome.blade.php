@@ -3,113 +3,148 @@
 <head>
     <meta charset="UTF-8" />
     <title>Bloomify - Nurture Your Mind</title>
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/favicon.ico') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href={{ asset('assets/favicon-32x32.png') }}>
-    <link rel="icon" type="image/png" sizes="16x16" href={{ asset('assets/favicon-16x16.png') }}>1
-    <link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicon-16x16.png') }}">
+
     <style>
+        /* 🌿 Design Tokens */
+        :root {
+            --mint-light: #EAF6EF;
+            --mint: #A8D5BA;
+            --mint-deep: #6B9A82;
+            --mint-dark: #4F7F69;
+            --lavender: #EDE9FE;
+            --text-dark: #1c2c25;
+            --radius-lg: 22px;
+            --radius-md: 14px;
+            --shadow-soft: 0 12px 30px rgba(0,0,0,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: 'Nunito', sans-serif;
-            color: #1c2c25;
-            background: #F5F7F5; /* Warm Off-White */
+            color: var(--text-dark);
+            background: linear-gradient(180deg, #F5F7F5, #EEF5F1);
+            line-height: 1.7;
         }
 
+        /* 🌸 Header */
         header {
-            background: #A8D5BA; /* Mint Green */
+            background: linear-gradient(135deg, var(--mint), var(--mint-deep));
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
-        }
-
-       .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #ffffff;
+            padding: 1rem 2.5rem;
+            box-shadow: var(--shadow-soft);
         }
 
         .logo img {
-            height: 40px;
-            width: auto;
-            vertical-align: middle;
+            height: 42px;
         }
 
-        @media (max-width: 768px) {
-    .logo img {
-        height: 30px; /* Smaller on mobile */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
     }
-    }
+
+/* Screen-reader only (accessible, invisible visually) */
+        .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        }
+
 
         nav a {
             margin-left: 1rem;
             text-decoration: none;
-            background: #6B9A82; /* Deep Mint */
+            background: rgba(255,255,255,0.2);
             color: #fff;
-            padding: 8px 16px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-weight: 700;
+            transition: all 0.3s ease;
         }
 
         nav a:hover {
-            background: #5A8A72; /* Darker Deep Mint */
+            background: #ffffff;
+            color: var(--mint-deep);
         }
 
+        /* 🌿 Hero */
         .hero {
             display: flex;
             flex-direction: column;
-            text-align: left;
-            padding: 6rem 2rem 4rem 2rem;
-            background: #F5F7F5; /* Warm Off-White */
-            position: relative;
+            gap: 3rem;
+            padding: 6rem 2rem;
+            background: radial-gradient(circle at top left, #ffffff, var(--mint-light));
         }
 
         @media (min-width: 768px) {
             .hero {
                 flex-direction: row;
-                justify-content: space-between;
                 align-items: center;
-                min-height: 80vh;
-                padding: 4rem 6rem;
+                padding: 5rem 6rem;
+                min-height: 85vh;
             }
         }
 
         .hero-text {
-            max-width: 600px;
-            z-index: 2;
+            max-width: 560px;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--mint-deep);
             margin-bottom: 1rem;
-            color: #6B9A82; /* Deep Mint */
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             margin-bottom: 2rem;
-            color: #1c2c25;
         }
 
-        .hero .cta {
-            background: #6B9A82; /* Deep Mint */
+        .cta {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--mint-deep), var(--mint-dark));
             color: #fff;
-            padding: 12px 24px;
+            padding: 14px 32px;
+            border-radius: 999px;
+            font-weight: 700;
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
         }
 
         .hero-image {
             flex: 1;
             position: relative;
-            display: none;
-            min-height: 400px;
-            border-radius: 12px;
+            min-height: 420px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            display: none;
         }
 
         @media (min-width: 768px) {
@@ -118,247 +153,238 @@
             }
         }
 
-       .hero-image::before {
-    content: "";
-    background-image: url('{{ asset('assets/heroimage.png') }}');
-    background-size: cover;
-    background-position: center;
-    background-blend-mode: overlay; /* Merges the image with the background */
-    opacity: 0.7; /* Adjusts transparency for blending; tweak as needed (0.5-0.8 works well) */
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-}
-
-        .wave {
-            display: block;
-            margin: 0;
-            padding: 0;
+        .hero-image::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url('{{ asset('assets/heroimage.png') }}');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.85;
         }
 
-         .explore-features {
+        /* 🌊 Wave */
+        .wave {
+            display: block;
+        }
+
+        /* 🌸 Explore */
+        .explore-features {
             text-align: center;
-            padding: 4rem 2rem;
-            background: #C1E1D1; /* Light Mint */
+            padding: 4rem 2rem 2rem;
+            background: var(--mint-light);
         }
 
         .explore-features h2 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: #6B9A82;
+            font-size: 2.2rem;
+            color: var(--mint-deep);
         }
 
+        /* 🌿 Features */
         .features {
             background: #ffffff;
-            padding: 4rem 2rem;
+            padding: 4rem;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 2rem;
-            max-width: 1000px;
-            margin: -50px auto 4rem auto;
-            border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            max-width: 1100px;
+            margin: -40px auto 4rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
         }
 
         .feature {
-            background: #C1E1D1; /* Light Mint */
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(180deg, #ffffff, var(--mint-light));
+            border-radius: var(--radius-md);
+            padding: 2.5rem 2rem;
             text-align: center;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+        }
+
+        .feature div {
+            font-size: 2.4rem;
         }
 
         .feature h3 {
             margin-top: 1rem;
-            margin-bottom: 0.5rem;
-            color: #6B9A82; /* Deep Mint */
+            color: var(--mint-deep);
         }
 
-        .feature p {
-            font-size: 0.95rem;
-            color: #333;
-        }
-
+        /* 🌿 How It Works */
         .how-it-works {
             text-align: center;
-            padding: 4rem 2rem;
-            background: #C1E1D1; /* Light Mint */
+            padding: 5rem 2rem;
+            background: var(--mint-light);
         }
 
         .how-it-works h2 {
-            font-size: 2rem;
+            font-size: 2.2rem;
+            color: var(--mint-deep);
             margin-bottom: 2rem;
-            color: #6B9A82; /* Deep Mint */
         }
 
         .steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
+            max-width: 1100px;
+            margin: auto;
         }
 
         .step {
             background: #ffffff;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-radius: var(--radius-md);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.2s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-4px);
         }
 
         .step h3 {
-            margin-top: 1rem;
-            color: #6B9A82; /* Deep Mint */
+            color: var(--mint-deep);
         }
 
-        .step p {
-            font-size: 0.95rem;
-            color: #333;
-        }
-
+        /* 🌸 Testimonial */
         .testimonial {
-            background: #E6E6FA; /* Lavender Mist */
-            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--lavender), #ffffff);
+            padding: 5rem 2rem;
             text-align: center;
         }
 
         .testimonial p {
-            font-style: italic;
             max-width: 600px;
-            margin: 0 auto 1rem auto;
-            font-size: 1.1rem;
-            color: #1c2c25;
+            margin: auto;
+            font-style: italic;
+            font-size: 1.2rem;
         }
 
         .trust {
-            font-size: 0.9rem;
-            color: #333;
+            margin-top: 1rem;
+            font-size: 0.95rem;
         }
 
+        /* 🌿 Final CTA */
         .final-cta {
             text-align: center;
-            padding: 4rem 2rem;
-            background: #ffffff;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--mint-light), #ffffff);
         }
 
         .final-cta h2 {
-            font-size: 2rem;
-            color: #6B9A82; /* Deep Mint */
-            margin-bottom: 1rem;
+            font-size: 2.2rem;
+            color: var(--mint-deep);
+            margin-bottom: 1.5rem;
         }
 
-        .final-cta a {
-            background: #6B9A82; /* Deep Mint */
-            color: #fff;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
+        /* 🌸 Footer */
         footer {
-            background: #6B9A82; /* Deep Mint */
+            background: var(--mint-deep);
             color: #fff;
             text-align: center;
-            padding: 1rem;
+            padding: 1.2rem;
             font-size: 0.9rem;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Header -->
-  <header>
-        <div class="logo">
-            <img src="{{ asset('assets/bloomify-logo.png') }}" alt="Bloomify Logo" class="h-10">
-            <span class="sr-only">Bloomify</span>
-        </div>
-        <nav>
-            <a href="/login">Login</a>
-            <a href="/register">Join Free</a>
-        </nav>
-    </header>
+<header>
+    <div class="logo">
+    <img src="{{ asset('assets/bloomify-logo.png') }}" alt="Bloomify Logo">
+</div>
+<span class="sr-only">Bloomify</span>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-text">
-            <h1>Grow Your Mind Daily 🌿</h1>
-            <p>Your safe space to track your moods, write your thoughts, and bloom into your best self — one day at a time.</p>
-            <a href="/register" class="cta">Get Started</a>
-        </div>
-        <div class="hero-image"></div>
-    </section>
 
-    <!-- SVG Wave -->
-    <svg class="wave" viewBox="0 0 1440 320">
-        <path fill="#ffffff" fill-opacity="1" d="M0,160L48,170.7C96,181,192,203,288,192C384,181,480,139,576,128C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-    </svg>
+    <nav>
+        <a href="/login">Login</a>
+        <a href="/register">Join Free</a>
+    </nav>
+</header>
 
-    <!-- Features -->
-    <section class= "explore-features">
-        <h2> Explore Features</h2>
-   <section class="features">
+<section class="hero">
+    <div class="hero-text">
+        <h1>Grow Your Mind Daily 🌿</h1>
+        <p>
+            Your safe space to track moods, journal your thoughts,
+            and bloom into your best self — one day at a time.
+        </p>
+        <a href="/register" class="cta">Get Started</a>
+    </div>
+    <div class="hero-image"></div>
+</section>
+
+<svg class="wave" viewBox="0 0 1440 320">
+    <path fill="#ffffff" d="M0,160L1440,64L1440,320L0,320Z"></path>
+</svg>
+
+<section class="explore-features">
+    <h2>Explore Features</h2>
+</section>
+
+<section class="features">
     <div class="feature">
         <div>😊</div>
         <h3>Mood Check-In</h3>
-        <p>Record your daily emotions and spot patterns in your feelings over time.</p>
+        <p>Record your daily emotions and discover patterns over time.</p>
     </div>
     <div class="feature">
         <div>📓</div>
         <h3>Journal</h3>
-        <p>Write reflections, gratitude notes, or private thoughts to clear your mind.</p>
+        <p>Write reflections, gratitude notes, or private thoughts.</p>
     </div>
     <div class="feature">
         <div>📈</div>
         <h3>Trends</h3>
-        <p>See how your moods change and grow with simple, beautiful charts.</p>
+        <p>Visualize your growth with simple, calming charts.</p>
     </div>
     <div class="feature">
         <div>🌿</div>
         <h3>Wellness Tips</h3>
-        <p>Gentle self-care reminders and mental wellness suggestions to help you bloom.</p>
+        <p>Gentle reminders that support your mental wellbeing.</p>
     </div>
 </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works">
-        <h2>How It Works</h2>
-        <div class="steps">
-            <div class="step">
-                <h3>1️⃣ Check In</h3>
-                <p>Log your mood every day in seconds.</p>
-            </div>
-            <div class="step">
-                <h3>2️⃣ Write</h3>
-                <p>Jot down thoughts or gratitude in your private journal.</p>
-            </div>
-            <div class="step">
-                <h3>3️⃣ Reflect</h3>
-                <p>View your trends to see how you grow over time.</p>
-            </div>
-            <div class="step">
-                <h3>4️⃣ Bloom</h3>
-                <p>Use gentle wellness tips to support your mental wellbeing.</p>
-            </div>
+<section class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+        <div class="step">
+            <h3>1️⃣ Check In</h3>
+            <p>Log your mood daily in seconds.</p>
         </div>
-    </section>
+        <div class="step">
+            <h3>2️⃣ Write</h3>
+            <p>Capture thoughts in your private journal.</p>
+        </div>
+        <div class="step">
+            <h3>3️⃣ Reflect</h3>
+            <p>Understand your emotional patterns.</p>
+        </div>
+        <div class="step">
+            <h3>4️⃣ Bloom</h3>
+            <p>Grow with mindful wellness tips.</p>
+        </div>
+    </div>
+</section>
 
-    <!-- Testimonial -->
-    <section class="testimonial">
-        <p>"Bloomify helps me understand myself better. I feel calmer and more in control every day.”</p>
-        <div class="trust">🌱 Your data stays private & secure, always.</div>
-    </section>
 
-    <!-- Final CTA -->
-    <section class="final-cta">
-        <h2>Ready to Grow Your Mind?</h2>
-        <a href="/register">Join Free Today</a>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-        🌸 Bloomify &copy; {{ date('Y') }} — Privacy | Terms
-    </footer>
+<section class="final-cta">
+    <h2>Ready to Grow Your Mind?</h2>
+    <a href="/register" class="cta">Join Free Today</a>
+</section>
+
+<footer>
+    🌸 Bloomify &copy; {{ date('Y') }} — Privacy | Terms
+</footer>
 
 </body>
 </html>

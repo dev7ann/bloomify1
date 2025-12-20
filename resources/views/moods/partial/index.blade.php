@@ -23,7 +23,7 @@
 
                     {{ ucfirst($mood->feeling) }} — {{ $mood->note ?? 'No note' }}
                 </p>
-                <p class="text-sm text-gray-500">{{ $mood->created_at->format('M d, Y, h:i A') }}</p>
+                <p class="text-sm text-gray-500">{{ $mood->created_at->format('M d, Y') }}</p>
 
                 <div class="mt-2">
                     <a href="#" 

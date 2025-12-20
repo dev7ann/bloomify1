@@ -1,7 +1,7 @@
 <div class="mood-picker container mx-auto p-6 bg-white rounded-lg shadow-md">
     <h2 class="text-2xl font-bold text-gray-800 mb-2">How are you?</h2>
     <p class="text-purple-600 mb-6 flex items-center">
-        <span class="mr-2">📅</span> Today, {{ now()->format('d M, H:i') }}
+        <span class="mr-2">📅</span> Today, {{ now()->format('d M') }}
     </p>
 
     <form action="{{ route('moods.store') }}" method="POST" id="mood-form">
