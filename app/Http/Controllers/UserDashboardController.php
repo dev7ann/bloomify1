@@ -43,18 +43,13 @@ class UserDashboardController extends Controller
             $dailyLabels[] = $date->format('M d');
         }
 
+        $wellnessTip = WellnessTip::inRandomOrder()->first();
+
         return view('dashboard', [
             'dailyScores' => $dailyScores,
-            'dailyLabels' => $dailyLabels
+            'dailyLabels' => $dailyLabels,
+            'wellnessTip' => $wellnessTip
         ]);
-
-        $wellnessTip = WellnessTip::inRandomOrder()->first();
-        return view('dashboard', [
-        'dailyScores' => $dailyScores,
-        'dailyLabels' => $dailyLabels,
-        'wellnessTip' => $wellnessTip
-]);
-
 
     }
 
