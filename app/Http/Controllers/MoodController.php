@@ -3,32 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mood;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class MoodController extends Controller
 {
-    public function index()
-    {
-        $moods = Auth::user()->moods()->latest()->get();
-        return view('moods', compact('moods'));
-    }
+    // public function index()
+    // {
+    //     $user = User::find(Auth::id());
+    //     $moods = $user->moods()->latest()->get();
+    //     return view('moods', compact('moods'));
+    // }
 
     public function store(Request $request)
     {
         $request->validate([
             'feeling' => 'required|string',
             'note' => 'nullable|string',
+            'mood_date' => 'required|date',
         ]);
 
+        $user = User::find(Auth::id());
         Mood::create([
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'feeling' => $request->feeling,
             'note' => $request->note,
+            'mood_date' => $request->mood_date,
         ]);
 
         if ($request->ajax()) {
-            $moods = Auth::user()->moods()->latest()->get();
+            $moods = $user->moods()->latest()->get();
             return view('moods.partial.index', compact('moods'));
         }
 
@@ -57,12 +62,14 @@ public function destroy(Mood $mood, Request $request)
         $validated = $request->validate([
             'feeling' => 'required|string|max:255',
             'note' => 'nullable|string|max:500',
+            'mood_date' => 'required|date',
         ]);
 
         $mood->update($validated);
 
+        $user = User::find(Auth::id());
         if ($request->ajax()) {
-            $moods = Auth::user()->moods()->latest()->get();
+            $moods = $user->moods()->latest()->get();
             return view('moods.partial.index', compact('moods'));
         }
 
@@ -72,7 +79,8 @@ public function destroy(Mood $mood, Request $request)
     // Partials for AJAX loading
     public function partialIndex()
     {
-        $moods = Auth::user()->moods()->latest()->get();
+        $user = User::find(Auth::id());
+        $moods = $user->moods()->latest()->get();
         return view('moods.partial.index', compact('moods'));
     }
 

@@ -9,11 +9,7 @@ class Mood extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'feeling',
-        'note',
-    ];
+    protected $guarded = [];
 
     // Relationship: A mood belongs to a user
     public function user()

@@ -7,95 +7,61 @@ function str_limit($string, $length) {
 }
 ?>
 
-<style>
-.btn {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
-  border: none;
-}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0 fw-bold text-primary-custom">
+                <i class="fas fa-book me-2"></i>My Journal Entries
+            </h2>
+            <button data-feature="journals-create" data-url="/journals/partial/create" class="btn btn-primary-custom">
+                <i class="fas fa-pen me-2"></i>Write New Entry
+            </button>
+        </div>
 
-.btn-primary {
-  background-color: #7e22ce; /* Purple tone */
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #6b21a8;
-  transform: scale(1.05);
-}
-
-.btn-secondary {
-  background-color: #e5e7eb; /* Light gray */
-  color: #374151;
-}
-
-.btn-secondary:hover {
-  background-color: #d1d5db;
-  transform: scale(1.05);
-}
-
-.success-message {
-  background-color: #dcfce7;
-  color: #166534;
-  padding: 10px;
-  border-radius: 6px;
-  margin-top: 10px;
-}
-
-.no-entries {
-  color: #6b7280;
-  margin-top: 15px;
-  font-style: italic;
-}
-</style>
-
-<div class="container">
-    <h2>My Journal Entries 📔</h2>
-
-    <a data-feature="journals-create" data-url="/journals/partial/create" class="btn btn-primary">Write New Journal</a>
-
-
-    <?php if ($success) { ?>
-        <div class="success-message"><?php echo htmlspecialchars($success); ?></div>
-    <?php } ?>
-
-    <?php if (count($journals) > 0) { ?>
-        <?php foreach ($journals as $journal) { ?>
-            <div class="journal-entry">
-                <h3><?php echo htmlspecialchars($journal->title); ?></h3>
-                <p class="date">Written on <?php echo (new DateTime($journal->created_at))->format('M d, Y'); ?></p>
-                <p><?php echo htmlspecialchars(str_limit($journal->content, 150)); ?></p>
+        <?php if ($success) { ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($success); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         <?php } ?>
-    <?php } else { ?>
-        <p class="no-entries">No journal entries yet. Start writing one!</p>
-    <?php } ?>
-</div>
 
-{{-- <script>
-    document.querySelectorAll('[data-feature="journals-create"]').forEach(link => {
-        link.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const url = link.getAttribute('data-url');
-            const contentArea = document.getElementById('content-area');
-            try {
-                const response = await fetch(url, {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                });
-                if (response.ok) {
-                    contentArea.innerHTML = await response.text();
-                } else {
-                    contentArea.innerHTML = '<p class="text-red-600">Error loading content. Try again later.</p>';
-                }
-            } catch (error) {
-                contentArea.innerHTML = '<p class="text-red-600">Error loading content: ' + error.message + '</p>';
-            }
-        });
-    });
-</script> --}}
+        <?php if (count($journals) > 0) { ?>
+            <div class="row g-4">
+                <?php foreach ($journals as $journal) { ?>
+                    <div class="col-12 col-lg-6">
+                        <div class="card card-custom h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h4 class="card-title fw-bold text-primary-custom mb-0">
+                                        <?php echo htmlspecialchars($journal->title); ?>
+                                    </h4>
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-book-open me-1"></i>Entry
+                                    </span>
+                                </div>
+                                <p class="text-muted small mb-3">
+                                    <i class="fas fa-calendar-alt me-2"></i>
+                                    <?php echo (new DateTime($journal->created_at))->format('F d, Y'); ?>
+                                </p>
+                                <p class="card-text text-secondary">
+                                    <?php echo htmlspecialchars(str_limit($journal->content, 200)); ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+        <?php } else { ?>
+            <div class="text-center py-5">
+                <div class="mb-3">
+                    <i class="fas fa-book-open" style="font-size: 4rem; color: #A8D5BA; opacity: 0.4;"></i>
+                </div>
+                <h5 class="text-secondary">No journal entries yet</h5>
+                <p class="text-muted">Start documenting your thoughts and reflections today 📝</p>
+                <button data-feature="journals-create" data-url="/journals/partial/create" class="btn btn-primary-custom mt-3">
+                    <i class="fas fa-pen me-2"></i>Write Your First Entry
+                </button>
+            </div>
+        <?php } ?>
+    </div>
+</div>

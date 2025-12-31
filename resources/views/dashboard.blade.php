@@ -1,449 +1,271 @@
-<?php
-$userName = isset(Auth::user()->name) ? Auth::user()->name : 'User';
-?>
+@extends('layouts.user')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Dashboard - Bloomify</title>
-  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+@section('title', 'Dashboard - Bloomify')
 
-  <style>
-    :root {
-      --purple-dark: #4b0082;
-      --purple-light: #a78bfa;
-      --lavender: #ede9fe;
-      --accent: #9333ea;
-    }
+@section('navigation')
+    <a href="#" data-feature="moods" data-url="/moods/partial/index" class="nav-link-custom active">
+        <i class="fas fa-smile"></i><span>Mood Tracker</span>
+    </a>
+    <a href="#" data-feature="journals" data-url="/journals/partial/index" class="nav-link-custom">
+        <i class="fas fa-book"></i><span>Journal</span>
+    </a>
+    <a href="#" data-feature="trends" data-url="/trends/partial/index" class="nav-link-custom">
+        <i class="fas fa-chart-line"></i><span>Mood Trends</span>
+    </a>
+    <a href="#" data-feature="wellness" data-url="/wellness/partial" class="nav-link-custom">
+        <i class="fas fa-leaf"></i><span>Wellness Tips</span>
+    </a>
+@endsection
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f9fafb;
-      color: #333;
-      height: 100vh;
-      display: flex;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      width: 256px;
-      background: var(--purple-dark);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-      transition: width 0.3s ease;
-      position: relative;
-      box-shadow: 2px 0 6px rgba(0,0,0,0.1);
-    }
-    .sidebar.collapsed {
-      width: 64px;
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-    .logo img {
-      height: 40px;
-      margin-right: 8px;
-    }
-    .logo .brand-name {
-      font-size: 18px;
-      font-weight: bold;
-      color: #fff;
-      white-space: nowrap;
-    }
-    .toggle-btn {
-      position: absolute;
-      top: 16px;
-      right: -12px;
-      background: var(--accent);
-      border: none;
-      color: #fff;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.3s ease;
-    }
-    .sidebar.collapsed .toggle-btn {
-      transform: rotate(180deg);
-    }
-
-    nav {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    nav a {
-      display: flex;
-      align-items: center;
-      padding: 10px 16px;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-      font-size: 15px;
-    }
-    nav a:hover {
-      background: var(--accent);
-      transform: translateX(4px);
-    }
-    nav a.active {
-      background: var(--purple-light);
-      font-weight: 600;
-    }
-    nav a i {
-      margin-right: 10px;
-      font-size: 16px;
-    }
-    .sidebar.collapsed nav a span {
-      display: none;
-    }
-    .sidebar.collapsed nav a {
-      justify-content: center;
-    }
-
-    .logout-form {
-      padding-top: 16px;
-      border-top: 1px solid var(--purple-light);
-    }
-    .logout-btn {
-      width: 100%;
-      padding: 10px;
-      background-color: #dc3545;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s;
-    }
-    .logout-btn:hover {
-      background-color: #b91c1c;
-    }
-
-    /* Main Content */
-    .main-content {
-      flex: 1;
-      padding: 40px;
-      overflow-y: auto;
-      background: #f9fafb;
-      transition: margin-left 0.3s ease;
-    }
-    .sidebar.collapsed + .main-content {
-      margin-left: 64px;
-    }
-
-    h1 {
-      font-size: 24px;
-      font-weight: 600;
-      color: var(--purple-dark);
-      margin-bottom: 8px;
-    }
-    p {
-      color: #555;
-      margin-bottom: 16px;
-    }
-
-    /* Content Area */
-    .content-area {
-      margin-top: 24px;
-      background: #fff;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      animation: fadeIn 0.4s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .text-red-600 {
-      color: #dc2626;
-    }
-  </style>
-</head>
-<body>
-  <div class="sidebar">
-    <div class="logo">
-      <img src="{{ asset('assets/bloomify-logo.png') }}" alt="Bloomify Logo">
-      <span class="brand-name">Bloomify</span>
+@section('content')
+    <div class="welcome-header">
+        <h1>Welcome, {{ Auth::user()->name ?? 'User' }} 👋</h1>
+        <p class="mb-0">Your personalized wellness dashboard. Track your journey to better mental health.</p>
     </div>
-    <button class="toggle-btn"><i class="fas fa-chevron-left"></i></button>
-    <nav>
-      <a data-feature="moods" data-url="/moods/partial/index" class="active"><i class="fas fa-smile"></i><span>Mood Tracker</span></a>
-      <a data-feature="journals" data-url="/journals/partial/index"><i class="fas fa-book"></i><span>Journal</span></a>
-      <a data-feature="trends" data-url="/trends/partial/index"><i class="fas fa-chart-line"></i><span>Mood Trends</span></a>
-      <a data-feature="wellness" data-url="/wellness/partial"><i class="fas fa-leaf"></i><span>Wellness Tips</span></a>
-      {{-- <a data-feature="support" data-url="/support/partial"><i class="fas fa-question-circle"></i><span>Support</span></a> --}}
-    </nav>
-    <div class="logout-form">
-      <form method="POST" action="/logout">
-        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-        <button type="submit" class="logout-btn">Logout</button>
-      </form>
+
+    <div class="content-card" id="content-area">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-leaf text-primary-custom" style="font-size: 4rem; opacity: 0.3;"></i>
+                    </div>
+                    <h3 class="text-primary-custom mb-3">Welcome to Your Wellness Space</h3>
+                    <p class="text-secondary mb-4">
+                        Track your moods, write journals, view trends, and discover wellness tips.<br>
+                        Use the sidebar to navigate through different features.
+                    </p>
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        <button class="btn btn-primary-custom" onclick="document.querySelector('[data-feature=moods]').click()">
+                            <i class="fas fa-smile me-2"></i>Log Your Mood
+                        </button>
+                        <button class="btn btn-outline-success" onclick="document.querySelector('[data-feature=journals]').click()">
+                            <i class="fas fa-book me-2"></i>Write Journal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+@endsection
 
-  <div class="main-content">
-    <h1>Welcome, <?php echo htmlspecialchars($userName); ?> 👋</h1>
-    <p>This is your personalized dashboard. Use the sidebar to navigate to different features.</p>
-    <div class="content-area" id="content-area">
-      <h2 class="text-xl font-semibold text-purple-700 mb-2">Quick Overview</h2>
-      <p class="text-gray-700">Track your moods, write journals, view mood trends, read wellness tips, or reach out for support.</p>
-    </div>
-  </div>
-
-  {{-- <div id="trends-area"></div>
-<script>
-    fetch('{{ route('trends.partial.index') }}')
-        .then(response => response.text())
-        .then(html => document.getElementById('trends-area').innerHTML = html);
-</script> --}}
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+@push('scripts')
 <script>
 function renderMoodChart() {
-  const canvas = document.getElementById('moodChart');
-  if (!canvas) return;
+    const canvas = document.getElementById('moodChart');
+    if (!canvas) return;
 
-  const labels = JSON.parse(canvas.dataset.labels);
-  const scores = JSON.parse(canvas.dataset.scores);
+    const labels = JSON.parse(canvas.dataset.labels);
+    const scores = JSON.parse(canvas.dataset.scores);
+    const cleanScores = scores.map(s => s === 0 ? null : s);
 
-  // Convert 0s to nulls → gaps instead of fake data
-  const cleanScores = scores.map(s => s === 0 ? null : s);
-
-  new Chart(canvas.getContext('2d'), {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Mood Trend',
-        data: cleanScores,
-        borderWidth: 2,
-        tension: 0.4,
-        spanGaps: false
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          min: 1,
-          max: 5,
-          title: {
-            display: true,
-            text: 'Mood Level'
-          }
+    new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Mood Score',
+                data: cleanScores,
+                borderColor: '#6B9A82',
+                backgroundColor: 'rgba(107, 154, 130, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                spanGaps: false,
+                fill: true,
+                pointRadius: 5,
+                pointBackgroundColor: '#6B9A82',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    min: 0,
+                    max: 5,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            const labels = ['', 'Sad', 'Anxious', 'Excited', 'Calm', 'Happy'];
+                            return labels[value] || '';
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
         }
-      }
-    }
-  });
-}
-</script>
-
-
-
-
-  <script>
-async function loadContent(url) {
-  const contentArea = document.getElementById('content-area');
-
-  try {
-    const response = await fetch(url, {
-      headers: { 'X-Requested-With': 'XMLHttpRequest' }
     });
-
-    if (!response.ok) throw new Error('Failed to load');
-
-    contentArea.innerHTML = await response.text();
-
-    // 🔑 Render chart AFTER HTML exists
-    renderMoodChart();
-
-    attachAllHandlers();
-
-  } catch (error) {
-    contentArea.innerHTML =
-      '<p class="text-red-600">Error loading content</p>';
-  }
 }
 
+async function loadContent(url) {
+    const contentArea = document.getElementById('content-area');
+    
+    try {
+        const response = await fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
 
+        if (!response.ok) throw new Error('Failed to load');
 
-// Sidebar navigation
-document.querySelectorAll('nav a').forEach(link => {
-  link.addEventListener('click', async (e) => {
-    e.preventDefault();
-    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-    link.classList.add('active');
-    loadContent(link.getAttribute('data-url'));
-  });
+        contentArea.innerHTML = await response.text();
+        renderMoodChart();
+        attachAllHandlers();
+    } catch (error) {
+        contentArea.innerHTML = '<div class="alert alert-danger">Error loading content. Please try again.</div>';
+    }
+}
+
+document.querySelectorAll('.nav-link-custom').forEach(link => {
+    link.addEventListener('click', async (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.nav-link-custom').forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+        loadContent(link.getAttribute('data-url'));
+    });
 });
 
-// Handles any dynamic links (buttons inside partials)
 function attachDynamicLinks() {
-  document.querySelectorAll('.ajax-link').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const url = btn.getAttribute('data-url');
-      if (!url) return;
-      const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-      const html = await response.text();
-      document.getElementById('content-area').innerHTML = html;
-      attachAllHandlers();
+    document.querySelectorAll('.ajax-link').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const url = btn.getAttribute('data-url');
+            if (!url) return;
+            const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            const html = await response.text();
+            document.getElementById('content-area').innerHTML = html;
+            attachAllHandlers();
+        });
     });
-  });
 }
 
-// Mood form handler
 function attachMoodFormHandler() {
-  const form = document.querySelector('#mood-form');
-  if (!form) return;
+    const form = document.querySelector('#mood-form');
+    if (!form) return;
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-      });
-      if (response.ok) {
-        const html = await response.text();
-        document.getElementById('content-area').innerHTML = html;
-        attachAllHandlers();
-      }
-    } catch (error) {
-      console.error('Mood form error:', error);
-    }
-  });
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            if (response.ok) {
+                const html = await response.text();
+                document.getElementById('content-area').innerHTML = html;
+                attachAllHandlers();
+            }
+        } catch (error) {
+            console.error('Mood form error:', error);
+        }
+    });
 }
 
-// Journal Create + Save handlers
 function attachJournalHandlers() {
-  // Handle "Write New Journal" button
-  document.querySelectorAll('[data-feature="journals-create"]').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const url = btn.getAttribute('data-url');
-      const contentArea = document.getElementById('content-area');
-      try {
-        const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-        if (response.ok) {
-          contentArea.innerHTML = await response.text();
-          attachAllHandlers(); // when journal form loads
-        } else {
-          contentArea.innerHTML = '<p class="text-red-600">Error loading journal form.</p>';
-        }
-      } catch (error) {
-        console.error('Error loading journal form:', error);
-      }
+    document.querySelectorAll('[data-feature="journals-create"]').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const url = btn.getAttribute('data-url');
+            const contentArea = document.getElementById('content-area');
+            try {
+                const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                if (response.ok) {
+                    contentArea.innerHTML = await response.text();
+                    attachAllHandlers();
+                } else {
+                    contentArea.innerHTML = '<div class="alert alert-danger">Error loading journal form.</div>';
+                }
+            } catch (error) {
+                console.error('Error loading journal form:', error);
+            }
+        });
     });
-  });
 }
 
 function attachJournalFormHandler() {
-  const form = document.querySelector('form[action="/journals"]');
-  if (!form) return;
+    const form = document.querySelector('form[action="/journals"]');
+    if (!form) return;
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-      });
-
-      if (response.ok) {
-        // Reload journal list after saving
-        const indexResponse = await fetch('/journals/partial/index', {
-          headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        });
-        const html = await indexResponse.text();
-        document.getElementById('content-area').innerHTML = html;
-        attachAllHandlers();
-      } else {
-        alert('Failed to save journal entry.');
-      }
-    } catch (error) {
-      console.error('Error submitting journal form:', error);
-    }
-  });
-}
-
-// Delete mood handler
-function attachDeleteHandlers() {
-  document.querySelectorAll('form.delete-mood-form').forEach(form => {
     form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!confirm('Are you sure you want to delete this mood?')) return;
+        e.preventDefault();
+        const formData = new FormData(form);
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
 
-      const formData = new FormData(form);
-      try {
-        const response = await fetch(form.action, {
-          method: 'POST',
-          body: formData,
-          headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        });
-
-        if (response.ok) {
-          const indexResponse = await fetch('/moods/partial/index', {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-          });
-          const html = await indexResponse.text();
-          document.getElementById('content-area').innerHTML = html;
-          attachAllHandlers();
+            if (response.ok) {
+                const indexResponse = await fetch('/journals/partial/index', {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                const html = await indexResponse.text();
+                document.getElementById('content-area').innerHTML = html;
+                attachAllHandlers();
+            } else {
+                alert('Failed to save journal entry.');
+            }
+        } catch (error) {
+            console.error('Error submitting journal form:', error);
         }
-      } catch (error) {
-        console.error('Error deleting mood:', error);
-      }
     });
-  });
 }
 
-// Attach all handlers after loading new content
+function attachDeleteHandlers() {
+    document.querySelectorAll('form.delete-mood-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!confirm('Are you sure you want to delete this mood?')) return;
+
+            const formData = new FormData(form);
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (response.ok) {
+                    const indexResponse = await fetch('/moods/partial/index', {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+                    const html = await indexResponse.text();
+                    document.getElementById('content-area').innerHTML = html;
+                    attachAllHandlers();
+                }
+            } catch (error) {
+                console.error('Error deleting mood:', error);
+            }
+        });
+    });
+}
+
 function attachAllHandlers() {
-  attachDynamicLinks();
-  attachMoodFormHandler();
-  attachDeleteHandlers();
-  attachJournalHandlers();
-  attachJournalFormHandler();
+    attachDynamicLinks();
+    attachMoodFormHandler();
+    attachDeleteHandlers();
+    attachJournalHandlers();
+    attachJournalFormHandler();
 }
 
-// Initial run
 attachAllHandlers();
-
-// Sidebar toggle
-const sidebar = document.querySelector('.sidebar');
-const toggleBtn = document.querySelector('.toggle-btn');
-toggleBtn.addEventListener('click', () => {
-  sidebar.classList.toggle('collapsed');
-});
 </script>
-
-
-</body>
-</html>
+@endpush
