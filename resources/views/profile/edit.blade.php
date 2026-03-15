@@ -1,29 +1,26 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+<div class="content-card">
+    <h3 class="mb-4">My Profile</h3>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
+    <div class="row g-4">
+        <div class="col-12 col-lg-6">
+            <div class="p-4 bg-white shadow-sm rounded-3">
+                <h5 class="mb-3">Profile Information</h5>
+                @include('profile.partials.update-profile-information-form')
             </div>
+        </div>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
+        <div class="col-12 col-lg-6">
+            <div class="p-4 bg-white shadow-sm rounded-3">
+                <h5 class="mb-3">Update Password</h5>
+                @include('profile.partials.update-password-form')
             </div>
+        </div>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
+        <div class="col-12">
+            <div class="p-4 bg-white shadow-sm rounded-3 border border-danger-subtle">
+                <h5 class="mb-3 text-danger">Delete Account</h5>
+                @include('profile.partials.delete-user-form')
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>

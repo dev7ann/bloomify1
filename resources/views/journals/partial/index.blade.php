@@ -46,6 +46,25 @@ function str_limit($string, $length) {
                                 <p class="card-text text-secondary">
                                     <?php echo htmlspecialchars(str_limit($journal->content, 200)); ?>
                                 </p>
+                                <div class="d-flex justify-content-end gap-2 mt-3">
+
+                                <button class="btn btn-sm btn-outline-primary ajax-link"
+                                    data-url="/journals/partial/edit/<?php echo $journal->id; ?>">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </button>
+
+                                <form method="POST" action="/journals/<?php echo $journal->id; ?>" 
+                                    onsubmit="return confirm('Delete this journal entry?')" 
+                                    style="display:inline;">
+                                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                                    <input type="hidden" name="_method" value="DELETE">
+
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash me-1"></i>Delete
+                                    </button>
+                                </form>
+
+                            </div>
                             </div>
                         </div>
                     </div>

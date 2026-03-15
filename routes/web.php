@@ -59,6 +59,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/journals', [JournalController::class, 'store'])->name('journals.store');
     Route::get('/journals/partial/index', [JournalController::class, 'partialIndex'])->name('journals.partial.index');
     Route::get('/journals/partial/create', [JournalController::class, 'partialCreate'])->name('journals.partial.create');
+    Route::delete('/journals/{journal}', [JournalController::class, 'destroy'])->name('journals.destroy');
+    Route::get('/journals/partial/edit/{journal}', [JournalController::class, 'Editpartial'])->name('journals.partial.edit');
+    Route::put('/journals/{journal}', [JournalController::class, 'update'])->name('journal.update');
 });
 
 Route::middleware(['auth'])->group(function () {

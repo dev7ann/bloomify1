@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\WellnessTip;
 
@@ -19,4 +20,6 @@ class WellnessController extends Controller
 
         return view('wellness.partial.index', compact('wellnessTip'));
     }
+
+
 }

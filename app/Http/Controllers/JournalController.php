@@ -50,6 +50,8 @@ public function partialCreate(Request $request)
         'content' => $validated['content'],
     ]);
 
+    
+
     // If AJAX, return partial
     if ($request->ajax()) {
         $journals = Journal::where('user_id', auth()->id())->latest()->get();
@@ -58,6 +60,32 @@ public function partialCreate(Request $request)
 
     // Otherwise, do normal redirect
     return redirect()->route('journals.index')->with('success', 'Journal saved!');
+}
+
+public function update(Request $request, $id)
+{
+    $journal = Journal::findOrFail($id);
+
+    $journal->update([
+        'title' => $request->title,
+        'content' => $request->content
+    ]);
+
+    return response()->json(['success' => true]);
+}
+
+public function editPartial($id)
+{
+    $journal = Journal::findOrFail($id);
+    return view('journals.partial.edit', compact('journal'));
+}
+
+public function destroy($id)
+{
+    $journal = Journal::findOrFail($id);
+    $journal->delete();
+
+    return redirect()->back()->with('success', 'Journal entry deleted.');
 }
 
 

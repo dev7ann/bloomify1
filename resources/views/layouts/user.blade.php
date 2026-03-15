@@ -378,6 +378,50 @@
         });
     </script>
 
+    <script>
+document.addEventListener('submit', async function(e) {
+
+    if (e.target && e.target.id === 'edit-journal-form') {
+
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (response.ok) {
+
+                const indexResponse = await fetch('/journals/partial/index', {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                const html = await indexResponse.text();
+
+                document.getElementById('content-area').innerHTML = html;
+
+            } else {
+                alert('Update failed.');
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
+
+});
+</script>
+
+
+
     @stack('scripts')
 </body>
 </html>

@@ -260,6 +260,16 @@ h2 {
 <div class="container">
 <h1>Admin Dashboard</h1>
 
+<div style="position:absolute; top:24px; right:24px;">
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="btn btn-danger">
+            Logout
+        </button>
+    </form>
+</div>
+
+
 <?php if($success): ?>
 <div class="alert-success"><?= htmlspecialchars($success); ?></div>
 <?php endif; ?>

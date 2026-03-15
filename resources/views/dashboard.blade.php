@@ -15,6 +15,9 @@
     <a href="#" data-feature="wellness" data-url="/wellness/partial" class="nav-link-custom">
         <i class="fas fa-leaf"></i><span>Wellness Tips</span>
     </a>
+    {{-- <a href="#" data-feature="profile" data-url="/profile/edit" class="nav-link-custom">
+        <i class="fa-solid fa-user"></i><span>profile</span>
+    </a> --}}
 @endsection
 
 @section('content')
