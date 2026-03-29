@@ -6,17 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-    {
-        Schema::table('moods', function (Blueprint $table) {
-            $table->renameColumn('mood', 'feeling');
-        });
-    }
+    // public function up(): void
+    // {
+    //     Schema::table('moods', function (Blueprint $table) {
+    //         $table->renameColumn('mood', 'feeling');
+    //     });
+    // }
 
-    public function down(): void
-    {
-        Schema::table('moods', function (Blueprint $table) {
-            $table->renameColumn('feeling', 'mood');
-        });
-    }
+    // public function down(): void
+    // {
+    //     Schema::table('moods', function (Blueprint $table) {
+    //         $table->renameColumn('feeling', 'mood');
+    //     });
+    // }
 };
