@@ -17,6 +17,9 @@ $error = session('error');
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard - Bloomify</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicon-16x16.png') }}">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 /* Basic styles */
@@ -370,18 +373,33 @@ h2 {
 
     <!-- Add Tip Form -->
     <form id="addTipForm" action="/admin/wellness-tips" method="POST" class="form-group hidden">
+      <label>Select Existing Tip:</label>
+          <select id="tipSelect" class="form-control">
+              <option value="">-- Reuse existing tip --</option>
+
+              <?php foreach($tips as $tip): ?>
+                  <option 
+                      value="<?= htmlspecialchars($tip->content) ?>"
+                      data-title="<?= htmlspecialchars($tip->title) ?>"
+                      data-category="<?= htmlspecialchars($tip->category) ?>">
+                      
+                      <?= htmlspecialchars($tip->title) ?> - <?= substr($tip->content, 0, 40) ?>...
+                  </option>
+              <?php endforeach; ?>
+
+          </select>
         <input type="hidden" name="_token" value="<?= csrf_token() ?>">
         <div class="form-group">
             <label>Title</label>
-            <input type="text" name="title" class="form-control" required>
+           <input type="text" id="titleInput" name="title" class="form-control" required>
         </div>
         <div class="form-group">
             <label>Content</label>
-            <textarea name="content" class="form-control" required></textarea>
+          <textarea id="contentInput" name="content" class="form-control" required></textarea>
         </div>
         <div class="form-group">
             <label>Category</label>
-            <input type="text" name="category" class="form-control">
+           <input type="text" id="categoryInput" name="category" class="form-control">
         </div>
         <button type="submit" class="btn btn-primary">Add Tip</button>
     </form>
@@ -438,6 +456,16 @@ function toggleEditForm(id){
     const form = document.getElementById('editTipForm-' + id);
     form.classList.toggle('hidden');
 }
+</script>
+
+<script>
+document.getElementById('tipSelect').addEventListener('change', function() {
+    let selected = this.options[this.selectedIndex];
+
+    document.getElementById('titleInput').value = selected.dataset.title || '';
+    document.getElementById('contentInput').value = selected.value || '';
+    document.getElementById('categoryInput').value = selected.dataset.category || '';
+});
 </script>
 
 <style>
@@ -498,6 +526,8 @@ document.querySelectorAll('.deleteUserBtn').forEach(btn=>{
         .then(()=> tr.remove());
     });
 });
+
+
 </script>
 </body>
 </html>
