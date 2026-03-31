@@ -107,6 +107,31 @@
                     </div>
                 </div>
             </div>
+            <div class="support-container" style="margin-top: 40px; padding: 20px; border-radius: 15px; background: rgba(255, 255, 255, 0.9); border: 1px solid #e0e0e0; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                <div style="background: #e8f5e9; padding: 10px; border-radius: 50%;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#2e7d32" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
+                <h3 style="margin: 0; color: #333; font-family: 'Segoe UI', sans-serif;">Need Professional Guidance?</h3>
+            </div>
+
+            <p style="color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 20px; font-family: 'Segoe UI', sans-serif;">
+                While self-care tips are helpful, sometimes speaking to a professional is the best way forward. 
+                As a KCA student, you have direct access to specialized counseling through the <strong>iMental</strong> platform.
+            </p>
+
+            <a href="https://imental.kcau.ac.ke/" target="_blank" style="display: inline-block; background: #2e7d32; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; font-family: 'Segoe UI', sans-serif; transition: 0.3s; box-shadow: 0 4px 6px rgba(46, 125, 50, 0.2);">
+                Book a Session on iMental →
+            </a>
+            
+            <p style="margin-top: 15px; font-size: 11px; color: #999;">
+                *This will redirect you to KCA University's official mental health portal.
+            </p>
+             </div>
+
         @else
             <div class="text-center py-5">
                 <div class="mb-4">

@@ -15,9 +15,9 @@
     <a href="#" data-feature="wellness" data-url="/wellness/partial" class="nav-link-custom">
         <i class="fas fa-leaf"></i><span>Wellness Tips</span>
     </a>
-    {{-- <a href="#" data-feature="profile" data-url="/profile/edit" class="nav-link-custom">
-        <i class="fa-solid fa-user"></i><span>profile</span>
-    </a> --}}
+   <a href="#" data-feature="profile" data-url="/profile/edit" class="nav-link-custom">
+         <i class="fa-solid fa-user"></i><span>profile</span>
+    </a>
 @endsection
 
 @section('content')
@@ -202,6 +202,7 @@ function attachJournalHandlers() {
     });
 }
 
+
 function attachJournalFormHandler() {
     const form = document.querySelector('form[action="/journals"]');
     if (!form) return;
@@ -228,6 +229,38 @@ function attachJournalFormHandler() {
             }
         } catch (error) {
             console.error('Error submitting journal form:', error);
+        }
+    });
+}
+
+function attachProfileFormHandler() {
+    const form = document.querySelector('#profile-form');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('/profile', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert(data.message);
+                loadContent('/profile/edit');
+            }
+
+        } catch (error) {
+            console.error('Profile update error:', error);
         }
     });
 }
@@ -267,6 +300,7 @@ function attachAllHandlers() {
     attachDeleteHandlers();
     attachJournalHandlers();
     attachJournalFormHandler();
+    attachProfileFormHandler();
 }
 
 attachAllHandlers();

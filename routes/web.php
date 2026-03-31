@@ -36,7 +36,7 @@ Route::prefix('admin')->middleware(['auth', 'admin', 'trackLastLogin'])->group(f
 Route::get('/trends/partial/index', [TrendsController::class, 'partialIndex'])->name('trends.partial.index');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

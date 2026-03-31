@@ -24,3 +24,31 @@
         </div>
     </div>
 </div>
+
+<script>
+document.querySelector('#profile-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let form = this;
+    let formData = new FormData(form);
+
+    fetch('/profile', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+
+            // 🔥 reload using YOUR system
+            loadContent('/profile/edit');
+        }
+    })
+    .catch(err => console.error(err));
+});
+</script>
