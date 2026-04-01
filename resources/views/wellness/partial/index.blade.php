@@ -31,8 +31,9 @@
                                             <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #A8D5BA 0%, #6B9A82 100%); margin: 0 auto; border-radius: 2px;"></div>
                                         </div>
                                         
-                                        <p class="text-secondary mb-0" style="font-size: 1.2rem; line-height: 2; font-weight: 400;">
-                                            {{ $wellnessTip->content }}
+                                      <p class="text-secondary mb-0"
+                                             style="font-size: 1.2rem; line-height: 2.4; font-weight: 400; white-space: pre-line;">
+                                             {!! e($wellnessTip->content) !!}
                                         </p>
                                     </div>
                                 </div>

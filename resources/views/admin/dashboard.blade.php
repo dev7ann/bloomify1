@@ -338,8 +338,8 @@ h2 {
 <div class="section" id="userManagement">
 <h2>User Management</h2>
 <form id="userSearchForm" class="form-group">
-<input type="text" id="searchInput" class="form-control" placeholder="Search by name or email">
-<button type="submit" class="btn btn-primary">Search</button>
+{{-- <input type="text" id="searchInput" class="form-control" placeholder="Search by name or email">
+<button type="submit" class="btn btn-primary">Search</button> --}}
 </form>
 
 <table class="table">
